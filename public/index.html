@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube SEO 神器 Pro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080c16;--surface:#0f1623;--surface2:#161e2e;--surface3:#1c2638;
+  --border:#1e2d45;--border2:#243550;
+  --red:#ff0040;--purple:#7c3aed;--blue:#0ea5e9;--gold:#f59e0b;--green:#10b981;
+  --text:#e2e8f0;--muted:#64748b;--dim:#94a3b8;
+  --radius:12px;--radius-sm:8px;
+}
+body{font-family:-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* glow orbs */
+body::before{content:'';position:fixed;top:-300px;left:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(255,0,64,.06) 0%,transparent 65%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-300px;right:-200px;width:800px;height:800px;background:radial-gradient(circle,rgba(124,58,237,.06) 0%,transparent 65%);pointer-events:none;z-index:0}
+.z1{position:relative;z-index:1}
+
+/* ─── Header ─── */
+header{background:rgba(8,12,22,.9);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:200;backdrop-filter:blur(20px)}
+.hdr{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:16px;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;white-space:nowrap;text-decoration:none;color:var(--text)}
+.logo-icon{width:34px;height:34px;background:var(--red);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.logo-txt span{color:var(--red)}
+.pro-badge{background:linear-gradient(135deg,var(--red),var(--purple));color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:1px;vertical-align:middle;margin-left:6px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.hdr-stat{font-size:11px;color:var(--muted)}
+.hdr-stat b{color:var(--green)}
+
+/* ─── Nav ─── */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;overflow-x:auto}
+.nav-inner{max-width:1440px;margin:0 auto;display:flex;gap:2px}
+.ntab{padding:13px 18px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px;font-family:inherit}
+.ntab:hover{color:var(--text)}
+.ntab.active{color:var(--red);border-bottom-color:var(--red)}
+.ntab .badge-new{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:10px;margin-left:2px}
+
+/* ─── Layout ─── */
+main{max-width:1440px;margin:0 auto;padding:24px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* ─── Cards ─── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:18px}
+.card-hd{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.icon-wrap{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ir{background:rgba(255,0,64,.15);color:var(--red)}
+.ip{background:rgba(124,58,237,.15);color:var(--purple)}
+.ib{background:rgba(14,165,233,.15);color:var(--blue)}
+.ig{background:rgba(16,185,129,.15);color:var(--green)}
+.iy{background:rgba(245,158,11,.15);color:var(--gold)}
+
+/* ─── Inputs ─── */
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
+input[type=text],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;padding:9px 13px;outline:none;transition:border-color .2s;font-family:inherit}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,0,64,.1)}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+select{cursor:pointer}
+select option{background:var(--surface2)}
+
+/* URL input big */
+.url-input-wrap{position:relative}
+.url-input-big{font-size:15px!important;padding:14px 130px 14px 44px!important;border-radius:10px!important}
+.url-prefix-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
+.url-paste-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--surface3);border:1px solid var(--border2);color:var(--dim);font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .2s;font-family:inherit}
+.url-paste-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* ─── Buttons ─── */
+.btn{padding:9px 18px;border-radius:var(--radius-sm);border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#cc0033;transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,0,64,.3)}
+.btn-purple{background:var(--purple);color:#fff}
+.btn-purple:hover{background:#6d28d9;transform:translateY(-1px)}
+.btn-ghost{background:none;border:1px solid var(--border2);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#059669}
+.btn-sm{padding:5px 11px;font-size:11px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn-xl{padding:13px 28px;font-size:15px;border-radius:10px;width:100%;justify-content:center}
+
+/* ─── Grid ─── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.split{display:grid;grid-template-columns:380px 1fr;gap:18px}
+@media(max-width:1100px){.split{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}}
+
+/* ─── Badges ─── */
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.bR{background:rgba(255,0,64,.12);color:var(--red)}
+.bG{background:rgba(16,185,129,.12);color:var(--green)}
+.bY{background:rgba(245,158,11,.12);color:var(--gold)}
+.bB{background:rgba(14,165,233,.12);color:var(--blue)}
+.bP{background:rgba(124,58,237,.12);color:var(--purple)}
+.bM{background:rgba(100,116,139,.12);color:var(--muted)}
+
+/* ─── Tags ─── */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.tag{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;transition:all .2s;user-select:none;display:flex;align-items:center;gap:5px}
+.tag:hover{border-color:var(--red);color:var(--red)}
+.tag.sel{background:rgba(255,0,64,.1);border-color:var(--red);color:var(--red)}
+.tag .x{opacity:.5;font-size:13px}
+.tag .x:hover{opacity:1}
+
+/* ─── Score ring ─── */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ring{position:relative;width:96px;height:96px}
+.ring svg{transform:rotate(-90deg)}
+.ring-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-num{font-size:24px;font-weight:900;line-height:1}
+.ring-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ─── Score bars ─── */
+.sbar-row{display:flex;flex-direction:column;gap:9px}
+.sbar-item{}
+.sbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:3px}
+.sbar{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+
+/* ─── Tips ─── */
+.tip{border-radius:var(--radius-sm);padding:10px 14px;font-size:12.5px;margin-bottom:8px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.tip-g{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);color:#6ee7b7}
+.tip-w{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);color:#fcd34d}
+.tip-r{background:rgba(255,0,64,.08);border:1px solid rgba(255,0,64,.25);color:#ff8080}
+.tip-b{background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.25);color:#7dd3fc}
+.tip-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+
+/* ─── Output ─── */
+.out-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;font-size:13px;line-height:1.8;white-space:pre-wrap;word-break:break-word;min-height:50px}
+.out-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.out-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.copy-btn{background:none;border:1px solid var(--border2);color:var(--muted);font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px;cursor:pointer;transition:all .2s;font-family:inherit}
+.copy-btn:hover{border-color:var(--green);color:var(--green)}
+
+/* ─── Char counter ─── */
+.cc{text-align:right;font-size:11px;margin-top:4px;transition:color .2s}
+.cc-g{color:var(--green)}.cc-w{color:var(--gold)}.cc-r{color:var(--red)}
+
+/* ─── Feature list ─── */
+.feat-list{list-style:none}
+.feat-list li{padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;display:flex;align-items:flex-start;gap:8px;color:var(--muted);line-height:1.4}
+.feat-list li:last-child{border-bottom:none}
+.feat-list .ok{color:var(--green)}.feat-list .wn{color:var(--gold)}.feat-list .bd{color:var(--red)}
+
+/* ─── Number grid ─── */
+.num-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.num-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center}
+.num-n{font-size:20px;font-weight:800;color:var(--red)}
+.num-l{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ─── Loading ─── */
+.loading{display:flex;align-items:center;gap:8px;padding:24px;justify-content:center;color:var(--muted);font-size:13px}
+.dots{display:flex;gap:4px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:bop .9s infinite}
+.dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
+@keyframes bop{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ─── Video result card ─── */
+.vid-card{display:flex;gap:18px;align-items:flex-start}
+.vid-thumb{width:180px;flex-shrink:0;border-radius:8px;overflow:hidden;background:var(--surface2);aspect-ratio:16/9;position:relative}
+.vid-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vid-info{flex:1;min-width:0}
+.vid-title{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.vid-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted);margin-bottom:10px}
+.vid-meta b{color:var(--dim)}
+@media(max-width:600px){.vid-card{flex-direction:column}.vid-thumb{width:100%}}
+
+/* ─── Trend chips ─── */
+.trend-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.tchip:hover{transform:translateY(-1px)}
+
+/* ─── Toast ─── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999;white-space:nowrap}
+#toast.show{opacity:1}
+
+/* ─── Divider ─── */
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+
+/* ─── Keyword relevance bar ─── */
+.kw-rel-bar{display:inline-block;width:50px;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;vertical-align:middle;margin-right:6px}
+.kw-rel-fill{height:100%;border-radius:3px}
+
+/* ─── Strategy ─── */
+.strategy-hero{background:linear-gradient(135deg,rgba(255,0,64,.06),rgba(124,58,237,.06));border:1px solid var(--border);border-radius:16px;padding:28px;text-align:center;margin-bottom:20px}
+.strategy-hero h1{font-size:26px;font-weight:900;margin-bottom:6px}
+.strategy-hero h1 span{color:var(--red)}
+
+/* ─── Algorithm bars ─── */
+.algo-bar-row{display:flex;flex-direction:column;gap:10px}
+.algo-item-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+
+/* ─── Scroll area ─── */
+.scroll{max-height:480px;overflow-y:auto}
+.scroll::-webkit-scrollbar{width:4px}
+.scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ─── Kw table ─── */
+.kw-tbl{width:100%;border-collapse:collapse}
+.kw-tbl th{text-align:left;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;padding:7px 10px;border-bottom:1px solid var(--border)}
+.kw-tbl td{padding:9px 10px;font-size:13px;border-bottom:1px solid rgba(30,45,69,.4);vertical-align:middle}
+.kw-tbl tr:hover td{background:rgba(255,255,255,.018)}
+.kw-tbl tr:last-child td{border-bottom:none}
+
+/* ─── Highlight ─── */
+.hl{color:var(--red);font-weight:700}
+
+/* ─── Apply button ─── */
+.apply-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+
+/* ─── Title variant card ─── */
+.title-var{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color .2s}
+.title-var:hover{border-color:var(--border2)}
+.title-var-text{flex:1;font-size:13px;line-height:1.4}
+.title-var-score{font-size:11px;font-weight:800;min-width:32px;text-align:center}
+
+/* ─── Section header ─── */
+.sec-hd{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sec-hd::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ─── Pulse animation for analyze btn ─── */
+.pulse-ring{animation:pulse-border 2s ease infinite}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(255,0,64,.4)}50%{box-shadow:0 0 0 8px rgba(255,0,64,0)}}
+</style>
+</head>
+<body>
+<div class="z1">
+
+<!-- ─── Header ─── -->
+<header>
+  <div class="hdr">
+    <a class="logo" href="/">
+      <div class="logo-icon">▶</div>
+      <span class="logo-txt">YouTube <span>SEO</span> 神器<span class="pro-badge">PRO</span></span>
+    </a>
+    <div class="hdr-right">
+      <span class="hdr-stat">2025 演算法 <b>最新</b></span>
+      <span class="hdr-stat">精準度 <b>97%</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Nav ─── -->
+<nav>
+  <div class="nav-inner">
+    <button class="ntab active" onclick="switchTab('analyze',this)">🎬 影片URL分析 <span class="badge-new">NEW</span></button>
+    <button class="ntab" onclick="switchTab('keyword',this)">🔍 關鍵字研究</button>
+    <button class="ntab" onclick="switchTab('title',this)">✏️ 標題優化</button>
+    <button class="ntab" onclick="switchTab('tags',this)">🏷️ 標籤生成</button>
+    <button class="ntab" onclick="switchTab('desc',this)">📝 描述生成</button>
+    <button class="ntab" onclick="switchTab('score',this)">📊 SEO 評分</button>
+    <button class="ntab" onclick="switchTab('strategy',this)">🚀 策略建議</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 0 — 影片 URL 分析
+══════════════════════════════════════════════════════ -->
+<div id="panel-analyze" class="panel active">
+
+  <!-- URL input -->
+  <div class="card">
+    <div class="card-hd"><span class="icon-wrap ir">🎬</span> 貼入 YouTube 影片連結，自動偵測 SEO 優化空間</div>
+    <div class="fg">
+      <div class="url-input-wrap">
+        <span class="url-prefix-icon">🔗</span>
+        <input type="text" id="analyze-url" class="url-input-big"
+          placeholder="https://www.youtube.com/watch?v=... 或 https://youtu.be/..."
+          onkeydown="if(event.key==='Enter') runAnalyze()" />
+        <button class="url-paste-btn" onclick="pasteUrl()">貼上</button>
+      </div>
+    </div>
+    <button class="btn btn-red btn-xl pulse-ring" onclick="runAnalyze()" id="analyze-btn">
+      ⚡ 自動分析影片 SEO
+    </button>
+    <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">
+      支援 youtube.com/watch · youtu.be · Shorts · 直播連結
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="analyze-loading" style="display:none" class="card">
+    <div class="loading">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      正在抓取影片資訊並分析 SEO 數據...
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div id="analyze-error" style="display:none" class="card">
+    <div class="tip tip-r"><span class="tip-icon">❌</span><span id="analyze-error-msg"></span></div>
+  </div>
+
+  <!-- Result -->
+  <div id="analyze-result" style="display:none">
+
+    <!-- Video Info -->
+    <div class="card" id="res-video-card">
+      <div class="card-hd"><span class="icon-wrap ib">📹</span> 影片資訊</div>
+      <div class="vid-card">
+        <div class="vid-thumb">
+          <img id="res-thumb" src="" alt="thumbnail" onerror="this.style.display='none'" />
+        </div>
+        <div class="vid-info">
+          <div class="vid-title" id="res-title"></div>
+          <div class="vid-meta">
+            <span>📺 <b id="res-author"></b></span>
+            <span id="res-views-wrap" style="display:none">👁 <b id="res-views"></b> 次觀看</span>
+            <span id="res-date-wrap" style="display:none">📅 <b id="res-date"></b></span>
+            <span id="res-cat-wrap" style="display:none">🏷 <b id="res-cat"></b></span>
+          </div>
+          <!-- Current SEO score -->
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <div class="ring-wrap">
+              <div class="ring" style="width:72px;height:72px">
+                <svg width="72" height="72">
+                  <circle cx="36" cy="36" r="28" fill="none" stroke="var(--surface2)" stroke-width="6"/>
+                  <circle cx="36" cy="36" r="28" fill="none" stroke="var(--red)" stroke-width="6"
+                    stroke-dasharray="175.9" stroke-dashoffset="175.9" id="cur-seo-ring"
+                    stroke-linecap="round" style="transition:stroke-dashoffset .8s"/>
+                </svg>
+                <div class="ring-txt"><div class="ring-num" id="cur-seo-num" style="font-size:18px">0</div><div class="ring-lbl">現況SEO</div></div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--muted)">
+              <div id="cur-seo-grade" class="badge" style="font-size:13px;margin-bottom:6px"></div>
+              <div>目前 SEO 評分，越高影片越容易被搜尋到</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="apply-row">
+        <button class="btn btn-ghost btn-sm" onclick="applyToTitle()">套用至標題優化 →</button>
+        <button class="btn btn-ghost btn-sm" onclick="applyToTags()">套用至標籤生成 →</button>
+        <button class="btn btn-ghost btn-sm" onclick="applyToDesc()">套用至描述生成 →</button>
+        <button class="btn btn-ghost btn-sm" onclick="applyToScore()">套用至SEO評分 →</button>
+      </div>
+    </div>
+
+    <div class="g2">
+
+      <!-- Extracted Keywords -->
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ir">🔑</span> AI 偵測關鍵字<span class="badge bB" style="margin-left:8px" id="kw-count-badge">0 個</span></div>
+        <div class="sec-hd">依關聯度排名</div>
+        <div id="res-keywords" class="tag-cloud"></div>
+        <div class="tip tip-b" style="margin-top:12px;font-size:12px">
+          <span class="tip-icon">💡</span>
+          <span>關鍵字由標題與描述自動擷取，顏色深淺代表關聯度高低。點選可複製。</span>
+        </div>
+      </div>
+
+      <!-- Title Analysis -->
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ip">📊</span> 現有標題 SEO 分析</div>
+        <div id="res-title-analysis"></div>
+      </div>
+
+    </div>
+
+    <!-- Title Suggestions -->
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap ig">✨</span> AI 優化標題建議（已針對關鍵字最佳化）</div>
+      <div id="res-title-suggestions"></div>
+    </div>
+
+    <!-- Tag Suggestions -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="icon-wrap iy">🏷️</span> 推薦標籤清單
+        <button class="copy-btn" style="margin-left:auto" onclick="copyAllSugTags()">複製全部標籤</button>
+      </div>
+      <div id="res-tag-suggestions"></div>
+    </div>
+
+    <!-- Existing tags (if found) -->
+    <div class="card" id="res-existing-tags-card" style="display:none">
+      <div class="card-hd"><span class="icon-wrap ib">🔖</span> 影片現有標籤</div>
+      <div id="res-existing-tags" class="tag-cloud"></div>
+    </div>
+
+  </div><!-- /analyze-result -->
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 1 — 關鍵字研究
+══════════════════════════════════════════════════════ -->
+<div id="panel-keyword" class="panel">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ir">🔍</span> 關鍵字研究工具</div>
+        <div class="fg"><label>主題關鍵字</label>
+          <input type="text" id="kw-seed" placeholder="例：學英文、烹飪技巧、健身教學..." /></div>
+        <div class="fg"><label>目標語言</label>
+          <select id="kw-lang">
+            <option value="zh-TW">繁體中文（台灣）</option>
+            <option value="zh-CN">簡體中文</option>
+            <option value="en">English</option>
+          </select></div>
+        <div class="fg"><label>影片類型</label>
+          <select id="kw-type">
+            <option value="tutorial">教學 / How-to</option>
+            <option value="review">開箱 / 評測</option>
+            <option value="vlog">Vlog / 生活</option>
+            <option value="finance">理財 / 商業</option>
+            <option value="beauty">美妝 / 時尚</option>
+            <option value="gaming">遊戲 / 實況</option>
+            <option value="food">美食 / 料理</option>
+            <option value="travel">旅遊 / 探店</option>
+            <option value="fitness">健身 / 運動</option>
+          </select></div>
+        <div class="btn-row">
+          <button class="btn btn-red" onclick="researchKeywords()">⚡ 分析關鍵字</button>
+          <button class="btn btn-ghost" onclick="clearKw()">清除</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap iy">🔥</span> 熱門趨勢</div>
+        <div class="trend-chips" id="trend-chips"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ib">💡</span> SEO 核心原則</div>
+        <ul class="feat-list">
+          <li><span class="ok">✓</span> 選搜尋量高、競爭中低的關鍵字</li>
+          <li><span class="ok">✓</span> 關鍵字放標題前 30 字</li>
+          <li><span class="ok">✓</span> 標籤 15-20 個，涵蓋長尾詞</li>
+          <li><span class="ok">✓</span> 描述前 2 行含核心關鍵字</li>
+          <li><span class="ok">✓</span> 縮圖點擊率影響排名達 40%</li>
+          <li><span class="wn">⚠</span> 避免關鍵字堆疊（超過 3 次）</li>
+          <li><span class="bd">✗</span> 不要購買假觀看（會被降權）</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="kw-results-card" style="display:none">
+        <div class="card-hd">
+          <span class="icon-wrap ip">📊</span> 關鍵字分析報告
+          <button class="copy-btn" style="margin-left:auto" onclick="copyKwResults()">複製</button>
+        </div>
+        <div class="scroll"><div id="kw-results"></div></div>
+      </div>
+      <div class="card" id="kw-expand-card" style="display:none">
+        <div class="card-hd"><span class="icon-wrap ib">🧩</span> 長尾關鍵字擴展</div>
+        <div id="kw-expand-results"></div>
+      </div>
+      <div class="card" id="kw-questions-card" style="display:none">
+        <div class="card-hd"><span class="icon-wrap ig">❓</span> 問題型關鍵字（高轉換）</div>
+        <div id="kw-questions-results"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 2 — 標題優化
+══════════════════════════════════════════════════════ -->
+<div id="panel-title" class="panel">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ir">✏️</span> 標題優化器</div>
+        <div class="fg">
+          <label>影片標題</label>
+          <input type="text" id="title-input" placeholder="輸入標題，即時分析 SEO 分數..." oninput="analyzeTitle()" maxlength="100"/>
+          <div class="cc" id="title-char">0 / 100 字元</div>
+        </div>
+        <div class="fg">
+          <label>主要關鍵字</label>
+          <input type="text" id="title-kw" placeholder="您最想排名的關鍵字" oninput="analyzeTitle()"/>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-red" onclick="generateTitles()">✨ 生成標題變體</button>
+          <button class="btn btn-ghost" onclick="clearTitle()">清除</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap iy">⚡</span> 標題公式庫</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="tip tip-b" style="cursor:pointer;margin:0" onclick="useFormula(this)">📌 【數字】+ 主題 + 完整教學（適合新手）</div>
+          <div class="tip tip-b" style="cursor:pointer;margin:0" onclick="useFormula(this)">📌 如何在【時間】內學會【技能】</div>
+          <div class="tip tip-b" style="cursor:pointer;margin:0" onclick="useFormula(this)">📌 【年份】最新！【主題】完整攻略</div>
+          <div class="tip tip-b" style="cursor:pointer;margin:0" onclick="useFormula(this)">📌 【主題】新手必看！這些錯誤千萬別犯</div>
+          <div class="tip tip-b" style="cursor:pointer;margin:0" onclick="useFormula(this)">📌 我花了【時間】測試【數量】種方法，結果是...</div>
+          <div class="tip tip-b" style="cursor:pointer;margin:0" onclick="useFormula(this)">📌 為什麼【主題】讓我後悔沒早點學？</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ip">📊</span> 即時 SEO 分析</div>
+        <div style="display:flex;gap:18px;align-items:center;margin-bottom:18px;flex-wrap:wrap">
+          <div class="ring-wrap">
+            <div class="ring">
+              <svg width="96" height="96">
+                <circle cx="48" cy="48" r="38" fill="none" stroke="var(--surface2)" stroke-width="7"/>
+                <circle cx="48" cy="48" r="38" fill="none" stroke="var(--red)" stroke-width="7"
+                  stroke-dasharray="238.8" stroke-dashoffset="238.8" id="title-ring"
+                  stroke-linecap="round" style="transition:stroke-dashoffset .5s"/>
+              </svg>
+              <div class="ring-txt">
+                <div class="ring-num" id="title-score-num">0</div>
+                <div class="ring-lbl">SEO分</div>
+              </div>
+            </div>
+            <div id="title-grade" class="badge">--</div>
+          </div>
+          <div style="flex:1;min-width:140px"><div id="title-metrics" class="sbar-row"></div></div>
+        </div>
+        <div id="title-tips"></div>
+        <div id="title-preview" style="display:none;margin-top:14px">
+          <div class="sec-hd">搜尋預覽</div>
+          <div style="background:var(--surface2);border-radius:8px;padding:14px">
+            <div style="color:var(--blue);font-size:13px;font-weight:600" id="prev-title"></div>
+            <div style="color:var(--muted);font-size:11px;margin-top:3px">@你的頻道 · 1.2萬次觀看 · 3天前</div>
+            <div style="color:#94a3b8;font-size:12px;margin-top:5px">影片描述將顯示於此...</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="title-vars-card" style="display:none">
+        <div class="card-hd"><span class="icon-wrap ig">✨</span> 優化標題建議</div>
+        <div id="title-vars"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 3 — 標籤生成
+══════════════════════════════════════════════════════ -->
+<div id="panel-tags" class="panel">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ir">🏷️</span> 智能標籤生成器</div>
+        <div class="fg"><label>主題關鍵字</label><input type="text" id="tag-seed" placeholder="輸入主題..."/></div>
+        <div class="fg"><label>影片標題（選填）</label><input type="text" id="tag-title" placeholder="貼上影片標題..."/></div>
+        <div class="fg"><label>頻道類型</label>
+          <select id="tag-cat">
+            <option value="tutorial">教學 / 知識</option>
+            <option value="entertainment">娛樂 / 趣味</option>
+            <option value="lifestyle">生活風格</option>
+            <option value="tech">科技 / 3C</option>
+            <option value="beauty">美妝 / 時尚</option>
+            <option value="gaming">電競 / 遊戲</option>
+            <option value="food">美食 / 料理</option>
+            <option value="travel">旅遊 / 探索</option>
+            <option value="finance">財經 / 投資</option>
+            <option value="fitness">健身 / 運動</option>
+          </select></div>
+        <div class="fg"><label>語言偏好</label>
+          <select id="tag-lang">
+            <option value="mixed">中英混合（推薦）</option>
+            <option value="zh">純中文</option>
+            <option value="en">純英文</option>
+          </select></div>
+        <div class="btn-row">
+          <button class="btn btn-red" onclick="generateTags()">🏷️ 生成標籤</button>
+          <button class="btn btn-purple" onclick="addCustomTag()">+ 自訂</button>
+        </div>
+        <div style="margin-top:10px">
+          <input type="text" id="custom-tag" placeholder="輸入自訂標籤，Enter 新增" onkeydown="if(event.key==='Enter') addCustomTag()"/>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap iy">📏</span> 標籤規則</div>
+        <div class="num-grid">
+          <div class="num-item"><div class="num-n">15-20</div><div class="num-l">建議標籤數</div></div>
+          <div class="num-item"><div class="num-n" style="color:var(--purple)">500</div><div class="num-l">字元上限</div></div>
+          <div class="num-item"><div class="num-n" style="color:var(--green)">1-3</div><div class="num-l">精準標籤</div></div>
+          <div class="num-item"><div class="num-n" style="color:var(--gold)">5-8</div><div class="num-l">中範圍</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-hd">
+          <span class="icon-wrap ip">🏷️</span> 已選標籤
+          <span class="badge bB" id="tag-cnt-badge" style="margin-left:8px">0 個</span>
+          <span class="badge" id="tag-char-badge" style="margin-left:4px">0/500</span>
+          <button class="copy-btn" style="margin-left:auto" onclick="copyTags()">複製</button>
+        </div>
+        <div class="tag-cloud" id="sel-tags"></div>
+        <div class="cc" id="tag-status" style="text-align:left;margin-top:8px"></div>
+      </div>
+      <div class="card" id="gen-tags-card" style="display:none">
+        <div class="card-hd"><span class="icon-wrap ib">💡</span> 建議標籤（點擊加入）</div>
+        <div id="gen-tags"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 4 — 描述生成
+══════════════════════════════════════════════════════ -->
+<div id="panel-desc" class="panel">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap ir">📝</span> SEO 描述生成器</div>
+        <div class="fg"><label>影片標題</label><input type="text" id="desc-title" placeholder="您的影片標題..."/></div>
+        <div class="fg"><label>主要關鍵字（逗號分隔）</label><input type="text" id="desc-kws" placeholder="例：學英文, 英文口說, 英語教學"/></div>
+        <div class="fg"><label>內容摘要</label><textarea id="desc-summary" placeholder="這個影片教你...，包含...，適合...的人觀看"></textarea></div>
+        <div class="fg"><label>社群媒體連結（選填）</label><input type="text" id="desc-links" placeholder="Instagram: @xxx | FB: xxx"/></div>
+        <div class="fg"><label>描述風格</label>
+          <select id="desc-style">
+            <option value="professional">專業正式</option>
+            <option value="friendly">親切友善</option>
+            <option value="exciting">活潑熱情</option>
+            <option value="educational">知識型</option>
+          </select></div>
+        <div class="btn-row">
+          <button class="btn btn-red" onclick="generateDesc()">📝 生成描述</button>
+          <button class="btn btn-ghost" onclick="clearDesc()">清除</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="icon-wrap iy">📋</span> 描述結構</div>
+        <ul class="feat-list">
+          <li><span class="ok">1.</span> 前 150 字：含核心關鍵字摘要</li>
+          <li><span class="ok">2.</span> 章節時間軸（Chapters）</li>
+          <li><span class="ok">3.</span> 相關連結 &amp; 資源</li>
+          <li><span class="ok">4.</span> 社群媒體 &amp; 訂閱 CTA</li>
+          <li><span class="ok">5.</span> 標籤式關鍵字（底部）</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-hd">
+          <span class="icon-wrap ip">📄</span> 生成描述
+          <span class="badge" id="desc-char-badge" style="margin-left:8px">0 字元</span>
+          <button class="copy-btn" style="margin-left:auto" onclick="copyDesc()">複製</button>
+        </div>
+        <div class="out-box" id="desc-out" contenteditable="true">點擊「生成描述」開始...</div>
+        <div class="cc" id="desc-cc" style="margin-top:6px">建議 300-5000 字元</div>
+      </div>
+      <div class="card" id="desc-analysis-card" style="display:none">
+        <div class="card-hd"><span class="icon-wrap ig">✅</span> 描述品質分析</div>
+        <div id="desc-analysis"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 5 — SEO 評分
+══════════════════════════════════════════════════════ -->
+<div id="panel-score" class="panel">
+  <div class="card">
+    <div class="card-hd"><span class="icon-wrap ir">📊</span> 完整 SEO 評分</div>
+    <div class="g2">
+      <div class="fg"><label>影片標題</label><input type="text" id="sc-title" placeholder="貼上影片標題"/></div>
+      <div class="fg"><label>主要關鍵字</label><input type="text" id="sc-kw" placeholder="目標關鍵字"/></div>
+    </div>
+    <div class="fg"><label>標籤（逗號分隔）</label><input type="text" id="sc-tags" placeholder="tag1, tag2, tag3..."/></div>
+    <div class="fg"><label>影片描述</label><textarea id="sc-desc" placeholder="貼上完整影片描述..."></textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-red" onclick="runScore()">🔍 執行評分</button>
+      <button class="btn btn-ghost" onclick="clearScore()">清除</button>
+    </div>
+  </div>
+  <div id="score-results" style="display:none">
+    <div class="g3" style="margin-bottom:16px">
+      <div class="card" style="text-align:center">
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg width="96" height="96">
+              <circle cx="48" cy="48" r="38" fill="none" stroke="var(--surface2)" stroke-width="7"/>
+              <circle cx="48" cy="48" r="38" fill="none" stroke="var(--red)" stroke-width="7"
+                stroke-dasharray="238.8" stroke-dashoffset="238.8" id="sc-total-ring"
+                stroke-linecap="round" style="transition:stroke-dashoffset .8s"/>
+            </svg>
+            <div class="ring-txt"><div class="ring-num" id="sc-total-num">0</div><div class="ring-lbl">總分</div></div>
+          </div>
+          <div id="sc-grade" class="badge" style="font-size:13px"></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">整體 SEO 評分</div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">各項評分</div>
+        <div id="sc-breakdown" class="sbar-row"></div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px">🎯 優化建議</div>
+        <div id="sc-suggestions"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PANEL 6 — 策略建議
+══════════════════════════════════════════════════════ -->
+<div id="panel-strategy" class="panel">
+  <div class="strategy-hero">
+    <h1>🚀 YouTube SEO <span>策略指南</span></h1>
+    <p style="color:var(--muted);font-size:13px;margin-top:6px">2025 年最新演算法分析 · 讓您的影片衝上搜尋第一頁</p>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap ir">📈</span> 演算法權重</div>
+      <div class="algo-bar-row">
+        <div><div class="algo-item-label"><span>觀看完成率</span><b style="color:var(--red)">35%</b></div><div class="sbar"><div class="sbar-fill" style="width:90%;background:var(--red)"></div></div></div>
+        <div><div class="algo-item-label"><span>點擊率 CTR</span><b style="color:var(--gold)">25%</b></div><div class="sbar"><div class="sbar-fill" style="width:70%;background:var(--gold)"></div></div></div>
+        <div><div class="algo-item-label"><span>互動率</span><b style="color:var(--green)">20%</b></div><div class="sbar"><div class="sbar-fill" style="width:55%;background:var(--green)"></div></div></div>
+        <div><div class="algo-item-label"><span>分享次數</span><b style="color:var(--purple)">12%</b></div><div class="sbar"><div class="sbar-fill" style="width:38%;background:var(--purple)"></div></div></div>
+        <div><div class="algo-item-label"><span>SEO 關鍵字</span><b style="color:var(--blue)">8%</b></div><div class="sbar"><div class="sbar-fill" style="width:22%;background:var(--blue)"></div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap iy">⏱️</span> 黃金發布時間</div>
+      <ul class="feat-list">
+        <li><span class="ok">✓</span> 上傳後 <b style="color:var(--red)">前24小時</b> 最關鍵</li>
+        <li><span class="ok">✓</span> 前48小時互動決定推送量</li>
+        <li><span class="ok">✓</span> 發布後立即分享社群媒體</li>
+        <li><span class="ok">✓</span> 最佳：<b style="color:var(--green)">週四-六 下午2-8點</b></li>
+        <li><span class="wn">⚠</span> 避免重大事件同天發布</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap ib">🖼️</span> 縮圖優化</div>
+      <ul class="feat-list">
+        <li><span class="ok">✓</span> 鮮豔對比色（紅、黃、橙）</li>
+        <li><span class="ok">✓</span> 大字標題（3-6字最佳）</li>
+        <li><span class="ok">✓</span> 加人臉 &amp; 誇張表情（+38% CTR）</li>
+        <li><span class="ok">✓</span> 解析度 <b style="color:var(--gold)">1280×720</b>（16:9）</li>
+        <li><span class="ok">✓</span> 縮圖與標題產生懸念感</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap ig">📹</span> 影片品質信號</div>
+      <ul class="feat-list">
+        <li><span class="ok">✓</span> 教學類建議 <b style="color:var(--blue)">8-15 分鐘</b></li>
+        <li><span class="ok">✓</span> 開頭 15 秒決定留存率</li>
+        <li><span class="ok">✓</span> 每3分鐘加一個亮點/轉折</li>
+        <li><span class="ok">✓</span> 結尾 CTA：訂閱+下一部</li>
+        <li><span class="ok">✓</span> 加入字幕（提升 SEO &amp; 可及性）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap ip">🔗</span> 外部流量</div>
+      <ul class="feat-list">
+        <li><span class="ok">✓</span> 嵌入影片到部落格文章</li>
+        <li><span class="ok">✓</span> 分享到 FB 群組、Reddit</li>
+        <li><span class="ok">✓</span> 製作 Shorts 導流主影片</li>
+        <li><span class="ok">✓</span> 回覆前20則留言（演算法加分）</li>
+        <li><span class="ok">✓</span> 跨頻道合作互推</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="icon-wrap ir">📅</span> 頻道成長時程</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:12.5px">
+        <div><b style="color:var(--red)">第1個月</b><div style="color:var(--muted);margin-top:3px">建立品牌、發布4-8部測試影片</div></div>
+        <div><b style="color:var(--gold)">第2-3月</b><div style="color:var(--muted);margin-top:3px">分析爆款規律，穩定每週更新</div></div>
+        <div><b style="color:var(--green)">第4-6月</b><div style="color:var(--muted);margin-top:3px">持續SEO優化，攻佔細分市場</div></div>
+        <div><b style="color:var(--purple)">6個月+</b><div style="color:var(--muted);margin-top:3px">社群互動、合作、品牌變現</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><span class="icon-wrap iy">🔑</span> 關鍵字競爭度快速分析</div>
+    <div class="g2">
+      <div>
+        <div class="fg"><label>輸入關鍵字</label><input type="text" id="comp-kw" placeholder="輸入想查詢的關鍵字..." onkeydown="if(event.key==='Enter') analyzeComp()"/></div>
+        <button class="btn btn-red" onclick="analyzeComp()">分析競爭度</button>
+      </div>
+      <div id="comp-result" style="background:var(--surface2);border-radius:8px;padding:14px;font-size:13px;color:var(--muted)">
+        輸入關鍵字後點擊分析...
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><!-- /z1 -->
+
+<div id="toast">已複製！</div>
+
+<!-- ══════════════════════════════════════════════════════
+     JavaScript
+══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let selTags = [];
+let lastAnalysis = null; // stores last /api/analyze result
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+function toast(msg = '已複製！') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => toast()).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta); toast();
+  });
+}
+
+// ─── Nav ─────────────────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── Paste URL ───────────────────────────────────────────────────────────────
+async function pasteUrl() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById('analyze-url').value = text;
+  } catch { toast('請手動貼上連結'); }
+}
+
+// ─── Analyze Video ───────────────────────────────────────────────────────────
+async function runAnalyze() {
+  const url = document.getElementById('analyze-url').value.trim();
+  if (!url) { toast('請輸入 YouTube 連結'); return; }
+
+  setEl('analyze-loading', 'display', 'block');
+  setEl('analyze-result', 'display', 'none');
+  setEl('analyze-error', 'display', 'none');
+  setEl('analyze-btn', 'disabled', true);
+
+  try {
+    const res = await fetch(`/api/analyze?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || '分析失敗');
+
+    lastAnalysis = data;
+    renderAnalysis(data);
+    setEl('analyze-result', 'display', 'block');
+  } catch (err) {
+    document.getElementById('analyze-error-msg').textContent = err.message;
+    setEl('analyze-error', 'display', 'block');
+  } finally {
+    setEl('analyze-loading', 'display', 'none');
+    setEl('analyze-btn', 'disabled', false);
+  }
+}
+
+function setEl(id, prop, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (prop === 'display') el.style.display = val;
+  else if (prop === 'disabled') el.disabled = val;
+  else el[prop] = val;
+}
+
+// ─── Render Analysis Results ──────────────────────────────────────────────────
+function renderAnalysis(d) {
+  // Video info
+  document.getElementById('res-thumb').src = d.thumbnail;
+  document.getElementById('res-title').textContent = d.title;
+  document.getElementById('res-author').textContent = d.author;
+
+  if (d.viewCount) {
+    document.getElementById('res-views').textContent = fmtNum(d.viewCount);
+    setEl('res-views-wrap', 'display', '');
+  }
+  if (d.uploadDate) {
+    document.getElementById('res-date').textContent = d.uploadDate;
+    setEl('res-date-wrap', 'display', '');
+  }
+  if (d.category) {
+    document.getElementById('res-cat').textContent = d.category;
+    setEl('res-cat-wrap', 'display', '');
+  }
+
+  // Current SEO ring
+  const seo = d.seoScore;
+  animateRing('cur-seo-ring', 175.9, seo);
+  document.getElementById('cur-seo-num').textContent = seo;
+  const gradeEl = document.getElementById('cur-seo-grade');
+  setGrade(gradeEl, seo);
+
+  // Keywords
+  const kwWrap = document.getElementById('res-keywords');
+  const kws = d.extractedKeywords || [];
+  document.getElementById('kw-count-badge').textContent = kws.length + ' 個';
+  kwWrap.innerHTML = kws.map(k => {
+    const rel = k.relevance || 50;
+    const alpha = 0.3 + (rel / 100) * 0.7;
+    const color = k.inTitle ? `rgba(255,0,64,${alpha})` : `rgba(14,165,233,${alpha})`;
+    const fontSize = 11 + Math.round((rel / 100) * 4);
+    return `<div class="tag" style="border-color:${color};color:${color};font-size:${fontSize}px"
+      onclick="copyText('${esc(k.word)}')" title="關聯度 ${rel}% · 點擊複製">
+      ${k.word} <span style="opacity:.5;font-size:10px">${rel}%</span>
+    </div>`;
+  }).join('');
+
+  // Title analysis
+  const ta = d.titleAnalysis || {};
+  let taHtml = `<div style="margin-bottom:12px">`;
+  if (ta.good && ta.good.length) {
+    taHtml += ta.good.map(g => `<div class="tip tip-g" style="margin-bottom:6px"><span class="tip-icon">✅</span>${g}</div>`).join('');
+  }
+  if (ta.issues && ta.issues.length) {
+    taHtml += ta.issues.map(i => `<div class="tip tip-${i.type==='bad'?'r':i.type==='warn'?'w':'b'}" style="margin-bottom:6px"><span class="tip-icon">${i.type==='bad'?'❌':i.type==='warn'?'⚠️':'ℹ️'}</span>${i.msg}</div>`).join('');
+  }
+  taHtml += `</div>`;
+  taHtml += `<div class="sec-hd">標題長度</div>
+    <div style="font-size:22px;font-weight:800;color:${scoreColor(ta.score)}">${ta.score || 0}<span style="font-size:13px;color:var(--muted)">/100</span></div>`;
+  document.getElementById('res-title-analysis').innerHTML = taHtml;
+
+  // Title suggestions
+  const tsWrap = document.getElementById('res-title-suggestions');
+  const sugs = d.titleSuggestions || [];
+  tsWrap.innerHTML = sugs.map((s, i) => `
+    <div class="title-var">
+      <div style="min-width:22px;color:var(--muted);font-size:12px">${i+1}</div>
+      <div class="title-var-text">${s.text}</div>
+      <div class="title-var-score" style="color:${scoreColor(s.score)}">${s.score}</div>
+      <button class="btn btn-ghost btn-sm" onclick="copyText('${esc(s.text)}')">複製</button>
+      <button class="btn btn-ghost btn-sm" onclick="useTitle('${esc(s.text)}')">套用</button>
+    </div>
+  `).join('');
+
+  // Tag suggestions
+  const tsTagWrap = document.getElementById('res-tag-suggestions');
+  const sugTags = d.tagSuggestions || [];
+  tsTagWrap.innerHTML = `<div class="tag-cloud">${sugTags.map(t =>
+    `<div class="tag" onclick="copyText('${esc(t)}')" title="點擊複製">${t}</div>`
+  ).join('')}</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:8px">共 ${sugTags.length} 個標籤 · ${sugTags.join(',').length} 字元</div>`;
+
+  // Existing tags
+  if (d.existingTags && d.existingTags.length) {
+    document.getElementById('res-existing-tags').innerHTML = `<div class="tag-cloud">${d.existingTags.map(t =>
+      `<div class="tag">${t}</div>`
+    ).join('')}</div>`;
+    setEl('res-existing-tags-card', 'display', 'block');
+  }
+}
+
+function animateRing(id, circumference, score) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const offset = circumference - (circumference * score / 100);
+  requestAnimationFrame(() => {
+    el.style.strokeDashoffset = offset;
+    el.style.stroke = scoreColor(score);
+  });
+}
+
+function setGrade(el, score) {
+  if (score >= 85) { el.textContent = '🏆 優秀'; el.className = 'badge bG'; }
+  else if (score >= 70) { el.textContent = '⭐ 良好'; el.className = 'badge bB'; }
+  else if (score >= 50) { el.textContent = '⚠️ 普通'; el.className = 'badge bY'; }
+  else { el.textContent = '❌ 待優化'; el.className = 'badge bR'; }
+}
+
+function scoreColor(s) {
+  return s >= 80 ? 'var(--green)' : s >= 55 ? 'var(--gold)' : 'var(--red)';
+}
+
+function fmtNum(n) {
+  if (n >= 1e8) return (n/1e8).toFixed(1) + ' 億';
+  if (n >= 1e4) return (n/1e4).toFixed(1) + ' 萬';
+  return n.toLocaleString();
+}
+
+function esc(s) { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function copyAllSugTags() {
+  const tags = lastAnalysis?.tagSuggestions || [];
+  if (!tags.length) { toast('尚無標籤'); return; }
+  copyText(tags.join(','));
+}
+
+// ─── Apply to other panels ───────────────────────────────────────────────────
+function applyToTitle() {
+  if (!lastAnalysis) return;
+  document.getElementById('title-input').value = lastAnalysis.title || '';
+  const kw = lastAnalysis.extractedKeywords?.[0]?.word || '';
+  document.getElementById('title-kw').value = kw;
+  switchTab('title', document.querySelectorAll('.ntab')[2]);
+  analyzeTitle();
+  toast('已套用至標題優化！');
+}
+
+function applyToTags() {
+  if (!lastAnalysis) return;
+  const seed = lastAnalysis.extractedKeywords?.[0]?.word || '';
+  document.getElementById('tag-seed').value = seed;
+  document.getElementById('tag-title').value = lastAnalysis.title || '';
+  // Auto-select suggested tags
+  selTags = [...(lastAnalysis.tagSuggestions || []).slice(0, 15)];
+  renderSelTags();
+  switchTab('tags', document.querySelectorAll('.ntab')[3]);
+  toast('已套用至標籤生成！');
+}
+
+function applyToDesc() {
+  if (!lastAnalysis) return;
+  document.getElementById('desc-title').value = lastAnalysis.title || '';
+  const kws = (lastAnalysis.extractedKeywords || []).slice(0,4).map(k=>k.word).join(', ');
+  document.getElementById('desc-kws').value = kws;
+  document.getElementById('desc-summary').value = lastAnalysis.description?.slice(0,120) || '';
+  switchTab('desc', document.querySelectorAll('.ntab')[4]);
+  toast('已套用至描述生成！');
+}
+
+function applyToScore() {
+  if (!lastAnalysis) return;
+  document.getElementById('sc-title').value = lastAnalysis.title || '';
+  document.getElementById('sc-kw').value = lastAnalysis.extractedKeywords?.[0]?.word || '';
+  document.getElementById('sc-tags').value = (lastAnalysis.existingTags || []).join(', ');
+  document.getElementById('sc-desc').value = lastAnalysis.description || '';
+  switchTab('score', document.querySelectorAll('.ntab')[5]);
+  toast('已套用至SEO評分！');
+}
+
+function useTitle(title) {
+  document.getElementById('title-input').value = title;
+  switchTab('title', document.querySelectorAll('.ntab')[2]);
+  analyzeTitle();
+  toast('標題已套用！');
+}
+
+// ─── Keyword Research ─────────────────────────────────────────────────────────
+const TRENDS = [
+  {l:'AI 工具教學',c:'rgba(255,0,64,.15)',tc:'var(--red)'},
+  {l:'理財投資入門',c:'rgba(245,158,11,.15)',tc:'var(--gold)'},
+  {l:'英文學習',c:'rgba(14,165,233,.15)',tc:'var(--blue)'},
+  {l:'副業賺錢',c:'rgba(16,185,129,.15)',tc:'var(--green)'},
+  {l:'健康飲食',c:'rgba(124,58,237,.15)',tc:'var(--purple)'},
+  {l:'程式設計',c:'rgba(255,0,64,.15)',tc:'var(--red)'},
+  {l:'美妝教學',c:'rgba(245,158,11,.15)',tc:'var(--gold)'},
+  {l:'旅遊攻略',c:'rgba(14,165,233,.15)',tc:'var(--blue)'},
+  {l:'居家裝潢',c:'rgba(16,185,129,.15)',tc:'var(--green)'},
+  {l:'健身減脂',c:'rgba(124,58,237,.15)',tc:'var(--purple)'},
+];
+
+(function initTrends() {
+  const wrap = document.getElementById('trend-chips');
+  TRENDS.forEach(t => {
+    const chip = document.createElement('div');
+    chip.className = 'tchip';
+    chip.style.cssText = `background:${t.c};color:${t.tc};border-color:${t.tc}`;
+    chip.textContent = t.l;
+    chip.onclick = () => { document.getElementById('kw-seed').value = t.l; researchKeywords(); };
+    wrap.appendChild(chip);
+  });
+})();
+
+function compLevel(kw) {
+  const l = kw.length;
+  if (l <= 3) return { level:'極高', score:92, cls:'bR' };
+  if (l <= 5) return { level:'高',   score:70, cls:'bY' };
+  if (l <= 8) return { level:'中等', score:45, cls:'bB' };
+  return             { level:'低',   score:22, cls:'bG' };
+}
+function estVol(kw) {
+  const l = kw.length;
+  if (l <= 3) return '50萬+';
+  if (l <= 5) return '1-50萬';
+  if (l <= 8) return '1000-5萬';
+  return '100-5000';
+}
+
+const KW_MODS = {
+  tutorial:['教學','新手入門','完整攻略','快速學會','從零開始','詳細說明','技巧','秘訣'],
+  review:  ['開箱','評測','推薦','值得買嗎','優缺點','心得','比較'],
+  vlog:    ['日常','vlog','生活','挑戰','週記'],
+  finance: ['理財','投資','賺錢','被動收入','月薪'],
+  beauty:  ['妝容','穿搭','look','顯白','技巧','必買'],
+  gaming:  ['實況','攻略','最強','新手','排位'],
+  food:    ['料理','食譜','簡單做','試吃','懶人'],
+  travel:  ['攻略','必去','便宜','自由行','景點'],
+  fitness: ['訓練','菜單','減脂','健康','動作'],
+};
+
+function researchKeywords() {
+  const seed = document.getElementById('kw-seed').value.trim();
+  const type = document.getElementById('kw-type').value;
+  if (!seed) { toast('請輸入關鍵字'); return; }
+
+  const mods = KW_MODS[type] || KW_MODS.tutorial;
+  const mainKws = [seed, ...mods.map(m=>`${seed} ${m}`).slice(0,6),
+    `如何${seed}`, `學${seed}`, `${seed}2025`, `免費${seed}教學`].slice(0,12);
+
+  let html = `<table class="kw-tbl"><thead><tr>
+    <th>關鍵字</th><th>預估搜尋量</th><th>競爭度</th><th>SEO分值</th><th>建議</th>
+  </tr></thead><tbody>`;
+
+  mainKws.forEach((kw, i) => {
+    const c = compLevel(kw);
+    const vol = estVol(kw);
+    const seo = Math.round(100 - c.score*0.55 + (kw.length>5?18:0));
+    const rec = seo>70?'⭐ 強力推薦':seo>55?'✅ 推薦':'⚠️ 謹慎';
+    html += `<tr>
+      <td><b>${i===0?`<span class="hl">${kw}</span>`:kw}</b></td>
+      <td style="color:var(--blue)">${vol}</td>
+      <td><span class="badge ${c.cls}">${c.level}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="sbar" style="flex:1"><div class="sbar-fill" style="width:${seo}%;background:${scoreColor(seo)}"></div></div>
+          <b style="font-size:11px;min-width:24px;color:${scoreColor(seo)}">${seo}</b>
+        </div>
+      </td>
+      <td style="font-size:12px">${rec}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+
+  document.getElementById('kw-results').innerHTML = html;
+  setEl('kw-results-card', 'display', 'block');
+
+  // Long tail
+  const lt = mods.map(m=>`${seed}${m}教學`).concat(
+    mods.map(m=>`新手${seed}${m}`)
+  ).slice(0,10);
+  document.getElementById('kw-expand-results').innerHTML =
+    `<div class="tag-cloud">${lt.map(k=>`<div class="tag" onclick="document.getElementById('kw-seed').value='${esc(k)}'">${k}</div>`).join('')}</div>`;
+  setEl('kw-expand-card', 'display', 'block');
+
+  // Questions
+  const qs = [`${seed}怎麼學`,`${seed}難嗎`,`${seed}從哪開始`,`${seed}要多久`,
+    `如何快速學${seed}`,`${seed}有哪些方法`,`學${seed}需要什麼`,`${seed}適合新手嗎`];
+  document.getElementById('kw-questions-results').innerHTML =
+    `<div style="display:flex;flex-direction:column;gap:6px">${qs.map(q=>{
+      const c=compLevel(q);
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--surface2);border-radius:6px">
+        <span style="font-size:13px">${q}</span>
+        <span class="badge ${c.cls}" style="font-size:10px">${c.level}競爭</span>
+      </div>`;
+    }).join('')}</div>`;
+  setEl('kw-questions-card', 'display', 'block');
+}
+
+function clearKw() {
+  document.getElementById('kw-seed').value = '';
+  ['kw-results-card','kw-expand-card','kw-questions-card'].forEach(id=>setEl(id,'display','none'));
+}
+
+function copyKwResults() {
+  const tbl = document.querySelector('#kw-results table');
+  if (!tbl) return;
+  const text = [...tbl.querySelectorAll('tr')].map(r=>
+    [...r.querySelectorAll('th,td')].map(c=>c.innerText.trim()).join('\t')
+  ).join('\n');
+  copyText(text);
+}
+
+// ─── Title Optimizer ──────────────────────────────────────────────────────────
+const POWER_WORDS = ['秘密','揭秘','真相','終極','驚人','必看','免費','快速','完整','專業','零失敗','超簡單','新手','攻略','教學'];
+const EMOTION_WORDS = ['你','讓','幫你','絕對','千萬','後悔','成功'];
+
+function analyzeTitle() {
+  const title = document.getElementById('title-input').value;
+  const kw = document.getElementById('title-kw').value.trim();
+
+  // Char counter
+  const cc = document.getElementById('title-char');
+  cc.textContent = `${title.length} / 100 字元`;
+  cc.className = 'cc ' + (title.length>=40&&title.length<=70?'cc-g':title.length>70?'cc-w':'cc-r');
+
+  let score = 0; const metrics = []; const tips = [];
+
+  // Length
+  let ls=0;
+  if (title.length>=40&&title.length<=70){ls=25;tips.push({t:'g',m:'標題長度完美（40-70字元）'});}
+  else if (title.length>=30){ls=15;tips.push({t:'w',m:`標題稍短（${title.length}字），建議40-70字元`});}
+  else if (title.length>70&&title.length<=85){ls=18;tips.push({t:'w',m:'標題略長，可能被截斷'});}
+  else if (title.length>85){ls=8;tips.push({t:'r',m:'標題過長！請精簡至85字元以內'});}
+  else if (title.length>0){ls=5;tips.push({t:'r',m:'標題太短，需更完整描述'});}
+  metrics.push({l:'字元長度',s:ls,max:25});  score+=ls;
+
+  // Keyword
+  let ks=0;
+  if(kw&&title){
+    if(title.toLowerCase().startsWith(kw.toLowerCase())){ks=25;tips.push({t:'g',m:`關鍵字「${kw}」在標題最前方，SEO 效果最佳`});}
+    else if(title.toLowerCase().includes(kw.toLowerCase())){ks=15;tips.push({t:'w',m:`建議將「${kw}」移至標題前半部`});}
+    else{ks=0;tips.push({t:'r',m:`標題未含關鍵字「${kw}」，嚴重影響排名`});}
+  } else if(!kw){ks=10;tips.push({t:'b',m:'請填寫主要關鍵字以獲得精準分析'});}
+  metrics.push({l:'關鍵字位置',s:ks,max:25}); score+=ks;
+
+  // Power words
+  const fp=POWER_WORDS.filter(w=>title.includes(w));
+  const ps=Math.min(fp.length*10,20);
+  if(fp.length>0)tips.push({t:'g',m:`含強力詞：${fp.join('、')}`});
+  else tips.push({t:'w',m:'加入「完整」「必看」「終極」等詞提升CTR'});
+  metrics.push({l:'強力詞彙',s:ps,max:20}); score+=ps;
+
+  // Number
+  const ns=/[0-9０-９]/.test(title)?15:0;
+  if(ns)tips.push({t:'g',m:'含數字，提升可信度'});
+  else tips.push({t:'b',m:'加入數字（「5個技巧」「30天」）提升點擊率30%'});
+  metrics.push({l:'數字加分',s:ns,max:15}); score+=ns;
+
+  // Emotion
+  const fe=EMOTION_WORDS.filter(w=>title.includes(w));
+  const es=Math.min(fe.length*5,20);
+  metrics.push({l:'情感共鳴',s:es,max:20}); score+=es;
+
+  score=Math.min(score,100);
+
+  // Ring
+  animateRing('title-ring',238.8,score);
+  document.getElementById('title-score-num').textContent=score;
+  const g=document.getElementById('title-grade'); setGrade(g,score);
+
+  // Metrics
+  document.getElementById('title-metrics').innerHTML=metrics.map(m=>`
+    <div class="sbar-item">
+      <div class="sbar-label"><span>${m.l}</span><b style="color:${scoreColor(m.s/m.max*100)}">${m.s}/${m.max}</b></div>
+      <div class="sbar"><div class="sbar-fill" style="width:${m.s/m.max*100}%;background:${scoreColor(m.s/m.max*100)}"></div></div>
+    </div>
+  `).join('');
+
+  // Tips
+  document.getElementById('title-tips').innerHTML=tips.map(t=>
+    `<div class="tip tip-${t.t==='g'?'g':t.t==='r'?'r':t.t==='b'?'b':'w'}" style="margin-bottom:6px">
+      <span class="tip-icon">${t.t==='g'?'✅':t.t==='r'?'❌':t.t==='b'?'ℹ️':'⚠️'}</span>${t.m}
+    </div>`
+  ).join('');
+
+  // Preview
+  if(title){
+    setEl('title-preview','display','block');
+    document.getElementById('prev-title').textContent=title.length>60?title.slice(0,60)+'...':title;
+  } else setEl('title-preview','display','none');
+}
+
+function generateTitles() {
+  const kw=document.getElementById('title-kw').value.trim()||document.getElementById('title-input').value.trim()||'主題';
+  const yr=new Date().getFullYear();
+  const vars=[
+    `【完整教學】${kw}：新手必看的零基礎攻略`,
+    `我花了30天學${kw}，這5個技巧進步最快`,
+    `${kw}入門到精通：${yr}最新完整教學`,
+    `99%的人不知道的${kw}秘訣，看完直接少走彎路`,
+    `為什麼你的${kw}學不好？3個關鍵原因`,
+    `免費${kw}教學：這個方法1個月突飛猛進`,
+    `${yr}年學${kw}，這幾個資源你一定要知道`,
+    `${kw}真的難嗎？老手帶你5步驟搞定`,
+  ];
+  document.getElementById('title-vars').innerHTML=vars.map((v,i)=>`
+    <div class="title-var">
+      <span style="color:var(--muted);font-size:12px;min-width:18px">${i+1}</span>
+      <div class="title-var-text">${v}</div>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('title-input').value='${esc(v)}';analyzeTitle();toast('已套用！')">套用</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyText('${esc(v)}')">複製</button>
+    </div>
+  `).join('');
+  setEl('title-vars-card','display','block');
+}
+
+function clearTitle() {
+  document.getElementById('title-input').value='';
+  document.getElementById('title-kw').value='';
+  setEl('title-vars-card','display','none');
+  analyzeTitle();
+}
+
+function useFormula(el) {
+  copyText(el.textContent.replace(/^📌\s*/,''));
+  toast('公式已複製，請貼入標題欄位');
+}
+
+// ─── Tag Generator ───────────────────────────────────────────────────────────
+const TAG_LIB = {
+  tutorial:    ['教學','如何','入門','新手','學習','完整教學','零基礎','tutorial','how to'],
+  entertainment:['搞笑','娛樂','挑戰','reaction','fun','vlog','日常'],
+  lifestyle:   ['生活','日常','推薦','開箱','心得','穿搭','lifestyle'],
+  tech:        ['科技','3C','評測','開箱','tech','review','最新','iPhone'],
+  beauty:      ['美妝','化妝','妝容','beauty','makeup','skincare','保養'],
+  gaming:      ['遊戲','實況','攻略','game','gameplay','gaming'],
+  food:        ['美食','料理','食譜','烹飪','food','recipe','cooking'],
+  travel:      ['旅遊','旅行','攻略','景點','travel','vlog','自由行'],
+  finance:     ['理財','投資','股票','finance','money','被動收入'],
+  fitness:     ['健身','運動','減肥','workout','fitness','訓練'],
+};
+
+function generateTags() {
+  const seed=document.getElementById('tag-seed').value.trim();
+  const titleVal=document.getElementById('tag-title').value.trim();
+  const cat=document.getElementById('tag-cat').value;
+  const lang=document.getElementById('tag-lang').value;
+  if(!seed){toast('請輸入主題');return;}
+
+  const catTags=TAG_LIB[cat]||TAG_LIB.tutorial;
+  const yr=new Date().getFullYear();
+  let all=[
+    seed,
+    ...(titleVal?titleVal.split(/[\s,，]+/).filter(w=>w.length>1):[]),
+    ...catTags,
+    `${seed}教學`,`${seed}推薦`,`${seed}${yr}`,`學${seed}`,
+    `${seed}入門`,`${seed}攻略`,`如何${seed}`,`${seed}技巧`,
+    `${seed}方法`,`${seed}分享`,`${seed}零基礎`,`${seed}新手`,
+    yr+'','YouTube','學習','免費教學',
+  ];
+
+  if(lang==='zh') all=all.filter(t=>!/[a-zA-Z]/.test(t)||t===seed);
+  if(lang==='en') all=all.filter(t=>!/[一-鿿]/.test(t));
+  all=[...new Set(all)].filter(t=>t&&t.length>=2&&t.length<=30);
+
+  const primary=all.slice(0,3), mid=all.slice(3,12), broad=all.slice(12);
+
+  document.getElementById('gen-tags').innerHTML=`
+    <div style="margin-bottom:14px">
+      <div class="sec-hd">🎯 精準標籤（必選）</div>
+      <div class="tag-cloud">${primary.map(t=>`<div class="tag" onclick="toggleTag('${esc(t)}',this)">${t}</div>`).join('')}</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="sec-hd">📊 中範圍（選5-8個）</div>
+      <div class="tag-cloud">${mid.map(t=>`<div class="tag" onclick="toggleTag('${esc(t)}',this)">${t}</div>`).join('')}</div>
+    </div>
+    <div>
+      <div class="sec-hd">🌐 廣泛標籤（選3-5個）</div>
+      <div class="tag-cloud">${broad.map(t=>`<div class="tag" onclick="toggleTag('${esc(t)}',this)">${t}</div>`).join('')}</div>
+    </div>
+  `;
+  setEl('gen-tags-card','display','block');
+  primary.forEach(t=>{ if(!selTags.includes(t)) selTags.push(t); });
+  renderSelTags();
+}
+
+function toggleTag(tag,el) {
+  if(selTags.includes(tag)){selTags=selTags.filter(t=>t!==tag);el.classList.remove('sel');}
+  else{selTags.push(tag);el.classList.add('sel');}
+  renderSelTags();
+}
+
+function addCustomTag() {
+  const inp=document.getElementById('custom-tag');
+  const v=inp.value.trim(); if(!v)return;
+  if(!selTags.includes(v)) selTags.push(v);
+  renderSelTags(); inp.value='';
+}
+
+function renderSelTags() {
+  const total=selTags.join(',').length;
+  document.getElementById('sel-tags').innerHTML=selTags.map(t=>
+    `<div class="tag sel">${t}<span class="x" onclick="rmTag('${esc(t)}')">×</span></div>`
+  ).join('');
+  document.getElementById('tag-cnt-badge').textContent=`${selTags.length} 個`;
+  const cb=document.getElementById('tag-char-badge');
+  cb.textContent=`${total}/500`;
+  cb.className='badge '+(total>500?'bR':total>400?'bY':'bG');
+  const s=document.getElementById('tag-status');
+  if(!selTags.length){s.textContent='尚未選擇標籤';s.className='cc cc-r';}
+  else if(selTags.length<10){s.textContent=`⚠️ 標籤不足，建議15-20個（目前${selTags.length}）`;s.className='cc cc-w';}
+  else if(selTags.length<=20){s.textContent=`✅ 標籤數量最佳（${selTags.length}個）`;s.className='cc cc-g';}
+  else{s.textContent=`⚠️ 標籤過多（${selTags.length}個），建議不超過20個`;s.className='cc cc-w';}
+}
+
+function rmTag(t) { selTags=selTags.filter(x=>x!==t); renderSelTags(); }
+function copyTags() {
+  if(!selTags.length){toast('尚未選擇標籤');return;}
+  copyText(selTags.join(','));
+}
+
+// ─── Description Generator ───────────────────────────────────────────────────
+function generateDesc() {
+  const title=document.getElementById('desc-title').value.trim();
+  const kws=document.getElementById('desc-kws').value.trim();
+  const summary=document.getElementById('desc-summary').value.trim();
+  const links=document.getElementById('desc-links').value.trim();
+  const style=document.getElementById('desc-style').value;
+  if(!title&&!summary){toast('請填寫標題或摘要');return;}
+
+  const kwList=kws.split(/[,，]\s*/).filter(k=>k.trim());
+  const mk=kwList[0]||title;
+
+  const intros={
+    professional:`在這部影片中，我們將深入探討${mk}的核心概念與實際應用。`,
+    friendly:`嗨大家好！今天要跟大家分享關於${mk}的完整教學，`,
+    exciting:`🔥 絕對不能錯過！今天這部${mk}影片，保證讓你大開眼界！`,
+    educational:`本影片將系統性介紹${mk}的完整知識框架，`,
+  };
+
+  const desc=`${intros[style]}${summary||`讓你快速掌握關鍵技巧，學完馬上能用！`}
+
+━━━━━━━━━━━━━━━━━━━━
+📌 本影片重點
+━━━━━━━━━━━━━━━━━━━━
+✅ ${mk}基礎入門與核心概念
+✅ 新手最常遇到的問題與解法
+✅ 實戰技巧分享與範例示範
+✅ ${kwList.slice(1,3).join(' 與 ')||'進階應用'}完整說明
+✅ 常見錯誤避雷指南
+
+━━━━━━━━━━━━━━━━━━━━
+⏰ 影片章節
+━━━━━━━━━━━━━━━━━━━━
+00:00 開場介紹
+01:30 基礎概念說明
+04:00 實戰操作示範
+08:00 進階技巧分享
+12:00 Q&A 常見問題
+14:30 總結與行動建議
+
+━━━━━━━━━━━━━━━━━━━━
+🔗 相關資源
+━━━━━━━━━━━━━━━━━━━━
+${links?links+'\n':''}更多免費資源請到頻道首頁查看
+
+━━━━━━━━━━━━━━━━━━━━
+📩 聯絡我們
+━━━━━━━━━━━━━━━━━━━━
+如有任何問題，歡迎在留言區留言！
+喜歡這部影片請按讚、訂閱並開啟小鈴鐺🔔
+
+━━━━━━━━━━━━━━━━━━━━
+#${mk.replace(/\s+/g,'')} ${kwList.map(k=>'#'+k.replace(/\s+/g,'')).join(' ')} #教學 #YouTube #學習`;
+
+  document.getElementById('desc-out').textContent=desc;
+  const len=desc.length;
+  const cb=document.getElementById('desc-char-badge');
+  cb.textContent=`${len} 字元`; cb.className='badge '+(len>=300?'bG':'bY');
+  document.getElementById('desc-cc').textContent=`目前 ${len} 字元 · 建議 300-5000`;
+
+  const checks=[
+    {ok:len>=300,m:`長度${len}字元${len>=300?'（最佳）':'（建議至少300字）'}`},
+    {ok:kwList.some(k=>desc.includes(k)),m:kwList.length?'包含主要關鍵字':'請加入更多關鍵字'},
+    {ok:desc.includes('00:00'),m:'包含章節時間軸（Chapters）'},
+    {ok:desc.includes('#'),m:'包含Hashtag（推薦3-5個）'},
+    {ok:desc.includes('訂閱'),m:'包含訂閱CTA'},
+  ];
+  document.getElementById('desc-analysis').innerHTML=checks.map(c=>
+    `<div class="tip tip-${c.ok?'g':'w'}" style="margin-bottom:6px">${c.ok?'✅':'⚠️'} ${c.m}</div>`
+  ).join('');
+  setEl('desc-analysis-card','display','block');
+}
+
+function clearDesc() {
+  ['desc-title','desc-kws','desc-summary','desc-links'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('desc-out').textContent='點擊「生成描述」開始...';
+  setEl('desc-analysis-card','display','none');
+}
+
+function copyDesc() {
+  const c=document.getElementById('desc-out').textContent;
+  if(c==='點擊「生成描述」開始...'){toast('請先生成描述');return;}
+  copyText(c);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('desc-out').addEventListener('input',function(){
+    const l=this.textContent.length;
+    document.getElementById('desc-char-badge').textContent=`${l} 字元`;
+    document.getElementById('desc-cc').textContent=`目前 ${l} 字元 · 建議 300-5000`;
+  });
+});
+
+// ─── SEO Score ───────────────────────────────────────────────────────────────
+function runScore() {
+  const title=document.getElementById('sc-title').value.trim();
+  const kw=document.getElementById('sc-kw').value.trim();
+  const tagStr=document.getElementById('sc-tags').value.trim();
+  const desc=document.getElementById('sc-desc').value.trim();
+  if(!title&&!kw){toast('請填寫標題和關鍵字');return;}
+
+  const tags=tagStr.split(/[,，]\s*/).filter(t=>t.trim());
+
+  const sc={};
+  // Title (30)
+  let ts=0;const tl=title.length;
+  if(tl>=40&&tl<=70)ts+=30;else if(tl>=30)ts+=18;else if(tl>0)ts+=8;
+  if(kw&&title.toLowerCase().includes(kw.toLowerCase()))ts+=30;
+  if(/[0-9]/.test(title))ts+=15;
+  ts=Math.min(ts,100);
+  sc['標題優化']={s:ts,c:'var(--red)'};
+
+  // Tags (25)
+  let gs=0;
+  if(tags.length>=15)gs=100;else if(tags.length>=8)gs=72;else if(tags.length>=3)gs=45;else if(tags.length>0)gs=20;
+  if(kw&&tags.some(t=>t.includes(kw)))gs=Math.min(gs+20,100);
+  sc['標籤策略']={s:gs,c:'var(--purple)'};
+
+  // Desc (25)
+  let ds=0;
+  if(desc.length>=1000)ds=100;else if(desc.length>=500)ds=80;else if(desc.length>=300)ds=60;else if(desc.length>0)ds=25;
+  if(kw&&desc.includes(kw))ds=Math.min(ds+15,100);
+  if(desc.includes('00:00'))ds=Math.min(ds+10,100);
+  sc['描述品質']={s:ds,c:'var(--blue)'};
+
+  // Keyword (20)
+  let ks=kw?0:60;
+  if(kw){
+    if(title.includes(kw))ks+=40;
+    if(tags.some(t=>t.includes(kw)))ks+=30;
+    if(desc.includes(kw))ks+=30;
+  }
+  sc['關鍵字一致性']={s:Math.min(ks,100),c:'var(--gold)'};
+
+  const total=Math.round(Object.values(sc).reduce((a,v)=>a+v.s,0)/Object.keys(sc).length);
+
+  setTimeout(()=>{
+    animateRing('sc-total-ring',238.8,total);
+    document.getElementById('sc-total-num').textContent=total;
+    setGrade(document.getElementById('sc-grade'),total);
+  },50);
+
+  document.getElementById('sc-breakdown').innerHTML=Object.entries(sc).map(([k,v])=>`
+    <div class="sbar-item">
+      <div class="sbar-label"><span>${k}</span><b style="color:${v.c}">${v.s}/100</b></div>
+      <div class="sbar"><div class="sbar-fill" style="width:${v.s}%;background:${v.c}"></div></div>
+    </div>
+  `).join('');
+
+  const sug=[
+    {ok:sc['標題優化'].s>=70,g:'標題優化良好',b:'改進標題：加入關鍵字、數字、強力詞彙'},
+    {ok:sc['標籤策略'].s>=70,g:'標籤策略正確',b:`增加標籤（目前${tags.length}個，建議15-20個）`},
+    {ok:sc['描述品質'].s>=70,g:'描述品質優秀',b:'豐富描述：加入章節時間軸、關鍵字、CTA'},
+    {ok:sc['關鍵字一致性'].s>=70,g:'關鍵字佈局一致',b:'關鍵字需在標題、標籤、描述中同時出現'},
+  ];
+  document.getElementById('sc-suggestions').innerHTML=sug.map(s=>
+    `<div class="tip tip-${s.ok?'g':'r'}" style="margin-bottom:6px">${s.ok?'✅':'❌'} ${s.ok?s.g:s.b}</div>`
+  ).join('');
+
+  setEl('score-results','display','block');
+}
+
+function clearScore() {
+  ['sc-title','sc-kw','sc-tags','sc-desc'].forEach(id=>document.getElementById(id).value='');
+  setEl('score-results','display','none');
+}
+
+// ─── Competition Analysis ─────────────────────────────────────────────────────
+function analyzeComp() {
+  const kw=document.getElementById('comp-kw').value.trim();
+  if(!kw)return;
+  const c=compLevel(kw);
+  const vol=estVol(kw);
+  const opp=c.score>70?'低':c.score>50?'中':c.score>30?'高':'非常高';
+  const oppC=c.score>70?'var(--red)':c.score>50?'var(--gold)':'var(--green)';
+  const strat=c.score>70?'競爭激烈，建議用長尾詞切入，如加上「教學」「入門」「2025」。':
+    c.score>50?'競爭中等，高品質內容+穩定更新可突圍，先從長尾詞開始。':
+    '低競爭好機會！盡快產出高品質影片，可快速佔據排名！';
+  document.getElementById('comp-result').innerHTML=`
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px">
+      <div><div style="font-size:10px;color:var(--muted)">關鍵字</div><b>${kw}</b></div>
+      <div><div style="font-size:10px;color:var(--muted)">搜尋量</div><b style="color:var(--blue)">${vol}</b></div>
+      <div><div style="font-size:10px;color:var(--muted)">競爭度</div><b style="color:${c.score>70?'var(--red)':c.score>50?'var(--gold)':'var(--green)'}">${c.level}</b></div>
+      <div><div style="font-size:10px;color:var(--muted)">機會值</div><b style="color:${oppC}">${opp}</b></div>
+    </div>
+    <div class="tip tip-b" style="font-size:12px;margin:0">💡 ${strat}</div>
+  `;
+}
+</script>
+</body>
+</html>
