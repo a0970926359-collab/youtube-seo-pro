@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://youtube-seo-pro-production.up.railway.app/sitemap.xml
