@@ -287,6 +287,55 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 @keyframes dl-flash{0%,100%{opacity:1}50%{opacity:.5}}
 .downloading{animation:dl-flash .5s ease 2}
 
+/* ─── Thumb sub-tabs ─── */
+.thumb-subtabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:2px solid var(--border);padding-bottom:10px}
+.stab{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:7px 18px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;transition:all .18s}
+.stab.active{background:var(--red);border-color:var(--red);color:#fff}
+.thumb-subpanel{animation:fadeIn .2s ease}
+
+/* ─── Plan sections ─── */
+.plan-section{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.plan-section-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:15px;font-weight:800}
+.plan-icon{font-size:18px}
+.plan-badge{margin-left:auto;font-size:10px;font-weight:700;background:rgba(255,0,64,.12);color:var(--red);border:1px solid rgba(255,0,64,.25);padding:3px 8px;border-radius:20px}
+
+/* Title cards */
+.plan-titles-grid{display:flex;flex-direction:column;gap:8px}
+.plan-title-card{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;cursor:pointer;transition:border-color .18s}
+.plan-title-card:hover{border-color:var(--red)}
+.plan-title-tag{font-size:10px;font-weight:800;padding:3px 8px;border-radius:10px;white-space:nowrap;min-width:52px;text-align:center}
+.tag-shock{background:rgba(255,0,64,.15);color:#ff0040}
+.tag-curious{background:rgba(255,165,0,.15);color:#ff8c00}
+.tag-contrast{background:rgba(0,153,255,.15);color:#0099ff}
+.plan-title-text{font-size:15px;font-weight:800;flex:1}
+.plan-title-copy{font-size:11px;color:var(--muted);white-space:nowrap}
+.plan-title-card:hover .plan-title-copy{color:var(--red)}
+
+/* Composition cards */
+.plan-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.plan-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:10px 12px}
+.plan-card-lbl{font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.plan-card-val{font-size:12px;font-weight:600;line-height:1.5}
+
+/* Color row */
+.plan-color-row{display:flex;gap:12px;flex-wrap:wrap}
+.plan-color-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;cursor:pointer;transition:border-color .18s}
+.plan-color-chip:hover{border-color:var(--red)}
+.plan-color-swatch{width:28px;height:28px;border-radius:6px;flex-shrink:0}
+.plan-color-info{font-size:12px}
+.plan-color-name{font-weight:800;display:block}
+.plan-color-role{font-size:10px;color:var(--muted)}
+
+/* Style tags */
+.plan-style-tags{display:flex;flex-wrap:wrap;gap:8px}
+.plan-style-tag{font-size:12px;font-weight:700;padding:5px 12px;border-radius:16px;background:var(--surface);border:1.5px solid var(--border2)}
+
+/* CTR list */
+.plan-ctr-list{display:flex;flex-direction:column;gap:6px}
+.plan-ctr-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5}
+.plan-ctr-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.plan-ctr-boost{margin-left:auto;font-size:11px;font-weight:800;color:var(--green);white-space:nowrap}
+
 /* ─── Top bar ─── */
 .top-bar{background:rgba(255,0,64,.06);border-bottom:1px solid rgba(255,0,64,.15);padding:8px 24px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
 .top-bar a{color:var(--red);font-weight:700;text-decoration:none}
@@ -865,9 +914,85 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 <div id="panel-thumb" class="panel">
   <div class="panel-hdr">
     <h2>🖼️ 封面圖生成</h2>
-    <p class="panel-sub">選擇模板 → 輸入文字 → 預覽 → 一鍵下載 1280×720 封面</p>
+    <p class="panel-sub">一鍵生成設計方案 → 選模板 → 輸入文字 → 下載 1280×720 封面</p>
   </div>
 
+  <!-- Sub-tabs -->
+  <div class="thumb-subtabs">
+    <button class="stab active" onclick="switchThumbTab('plan',this)">📋 設計方案生成</button>
+    <button class="stab" onclick="switchThumbTab('canvas',this)">🎨 封面圖生成器</button>
+  </div>
+
+  <!-- ── SUB-PANEL: Design Plan ── -->
+  <div id="thumb-plan" class="thumb-subpanel">
+    <div class="field-group">
+      <label class="field-label">🎬 影片主題</label>
+      <input id="plan-topic" class="inp" maxlength="80" placeholder="例：如何在30天內學會Python｜我買了最貴的耳機｜台灣人不敢說的秘密…">
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:18px">
+      <button class="btn-main" onclick="generatePlan()" style="flex:1">⚡ 生成設計方案</button>
+      <button class="btn-sec" onclick="clearPlan()">清除</button>
+    </div>
+
+    <div id="plan-result" style="display:none">
+
+      <!-- Section 1: Titles -->
+      <div class="plan-section">
+        <div class="plan-section-hdr">
+          <span class="plan-icon">✏️</span>
+          <span>封面主標文字（3組）</span>
+          <span class="plan-badge">短 · 有情緒 · 引好奇</span>
+        </div>
+        <div id="plan-titles" class="plan-titles-grid"></div>
+      </div>
+
+      <!-- Section 2: Composition -->
+      <div class="plan-section">
+        <div class="plan-section-hdr">
+          <span class="plan-icon">📐</span>
+          <span>視覺構圖建議</span>
+        </div>
+        <div id="plan-comp" class="plan-cards"></div>
+      </div>
+
+      <!-- Section 3: Colors -->
+      <div class="plan-section">
+        <div class="plan-section-hdr">
+          <span class="plan-icon">🎨</span>
+          <span>顏色建議</span>
+        </div>
+        <div id="plan-colors" class="plan-color-row"></div>
+      </div>
+
+      <!-- Section 4: Style -->
+      <div class="plan-section">
+        <div class="plan-section-hdr">
+          <span class="plan-icon">🔥</span>
+          <span>設計風格</span>
+        </div>
+        <div id="plan-style" class="plan-style-tags"></div>
+      </div>
+
+      <!-- Section 5: CTR Analysis -->
+      <div class="plan-section">
+        <div class="plan-section-hdr">
+          <span class="plan-icon">📊</span>
+          <span>點擊誘因分析</span>
+          <span class="plan-badge" id="plan-ctr-badge">預測 CTR 提升</span>
+        </div>
+        <div id="plan-ctr" class="plan-ctr-list"></div>
+      </div>
+
+      <!-- Apply button -->
+      <div style="text-align:center;margin-top:18px">
+        <button class="btn-main" onclick="applyPlanToCanvas()">🎨 套用至封面圖生成器 →</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SUB-PANEL: Canvas Builder ── -->
+  <div id="thumb-canvas" class="thumb-subpanel" style="display:none">
   <div class="thumb-split">
     <!-- LEFT: controls -->
     <div class="thumb-controls">
@@ -985,7 +1110,8 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
       </div>
     </div>
   </div>
-</div>
+  </div><!-- /thumb-canvas subpanel -->
+</div><!-- /panel-thumb -->
 
 </main>
 </div><!-- /z1 -->
@@ -2005,6 +2131,316 @@ function updateThumbScore() {
 }
 
 window.addEventListener('load', () => { renderThumbnail(); });
+
+// ══════════════════════════════════════════════════════
+// THUMBNAIL DESIGN PLAN GENERATOR
+// ══════════════════════════════════════════════════════
+
+function switchThumbTab(tab, btn) {
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('thumb-plan').style.display   = tab==='plan'   ? '' : 'none';
+  document.getElementById('thumb-canvas').style.display = tab==='canvas' ? '' : 'none';
+  if(tab==='canvas') renderThumbnail();
+}
+
+// ─── Topic classifier ────────────────────────────────
+function classifyTopic(topic) {
+  const t = topic.toLowerCase();
+  if(/教|學|步驟|方法|技巧|怎麼|如何|入門|攻略|秘訣/.test(t)) return 'tutorial';
+  if(/開箱|買|花了|最貴|最便宜|值不值|cp值/.test(t))           return 'review';
+  if(/挑戰|天|小時|第一次|嘗試|測試|實驗/.test(t))             return 'challenge';
+  if(/秘密|真相|沒人告訴|騙局|別買|不要|警告/.test(t))         return 'exposé';
+  if(/收入|月薪|賺錢|財富|存款|投資|理財/.test(t))             return 'money';
+  if(/vs|對比|比較|哪個好|差在哪/.test(t))                     return 'compare';
+  if(/vlog|日常|一天|我的|生活/.test(t))                       return 'vlog';
+  return 'general';
+}
+
+// ─── Title generators ────────────────────────────────
+const TITLE_TEMPLATES = {
+  tutorial: [
+    { style:'shock',   fn: t => `學了才知道有多狠！` },
+    { style:'curious', fn: t => `99%的人都做錯了` },
+    { style:'contrast',fn: t => `別人3年，我30天` },
+  ],
+  review: [
+    { style:'shock',   fn: t => `真的值這個價嗎？` },
+    { style:'curious', fn: t => `買之前先看這個` },
+    { style:'contrast',fn: t => `便宜vs貴的差在哪` },
+  ],
+  challenge: [
+    { style:'shock',   fn: t => `差點放棄…結果呢` },
+    { style:'curious', fn: t => `沒人敢做的挑戰` },
+    { style:'contrast',fn: t => `第1天 vs 最後一天` },
+  ],
+  exposé: [
+    { style:'shock',   fn: t => `他們不希望你知道` },
+    { style:'curious', fn: t => `我調查了3個月…` },
+    { style:'contrast',fn: t => `官方說法vs真相` },
+  ],
+  money: [
+    { style:'shock',   fn: t => `這樣存錢翻3倍！` },
+    { style:'curious', fn: t => `月薪3萬也能做到` },
+    { style:'contrast',fn: t => `窮人思維vs富人思維` },
+  ],
+  compare: [
+    { style:'shock',   fn: t => `答案出乎所有人意料` },
+    { style:'curious', fn: t => `選錯你會後悔` },
+    { style:'contrast',fn: t => `勝負在第一眼就定了` },
+  ],
+  vlog: [
+    { style:'shock',   fn: t => `這天改變了我的人生` },
+    { style:'curious', fn: t => `沒想到會發生這個…` },
+    { style:'contrast',fn: t => `理想vs現實的一天` },
+  ],
+  general: [
+    { style:'shock',   fn: t => `看完你會後悔沒早看` },
+    { style:'curious', fn: t => `這件事我藏了很久了` },
+    { style:'contrast',fn: t => `以前vs現在，差很大` },
+  ],
+};
+
+const STYLE_LABELS = { shock:'衝擊型', curious:'好奇型', contrast:'對比型' };
+const STYLE_CSS    = { shock:'tag-shock', curious:'tag-curious', contrast:'tag-contrast' };
+
+// ─── Composition rules ───────────────────────────────
+const COMP_RULES = {
+  tutorial: {
+    subject:  '人物指著畫面右側（帶領視線）',
+    expression:'自信微笑或驚訝「原來如此」表情',
+    bg:       '簡潔單色或漸層，不搶主角',
+  },
+  review: {
+    subject:  '產品置中偏右，人物在左側做反應',
+    expression:'誇張驚訝或懷疑挑眉',
+    bg:       '乾淨白/黑背景，突出產品',
+  },
+  challenge: {
+    subject:  '挑戰前後對比分割構圖',
+    expression:'左側痛苦/右側驚喜的強烈對比',
+    bg:       '分割色塊（左暗右亮）',
+  },
+  exposé: {
+    subject:  '人物半側臉＋神秘手勢（捂嘴或食指豎起）',
+    expression:'神秘、震驚、偷偷告訴你',
+    bg:       '暗色系＋打光在臉上，電影感',
+  },
+  money: {
+    subject:  '鈔票/金幣道具＋人物誇張表情',
+    expression:'眼睛睜大＋嘴巴張開',
+    bg:       '金色漸層或深色有質感背景',
+  },
+  compare: {
+    subject:  '左右各放一個選項，中間大字「VS」',
+    expression:'兩側各有不同情緒人物',
+    bg:       '左右對比色塊',
+  },
+  vlog: {
+    subject:  '人物自然狀態，生活感構圖',
+    expression:'真實情緒，不刻意',
+    bg:       '真實環境或輕微模糊',
+  },
+  general: {
+    subject:  '人物置中偏左，文字在右側',
+    expression:'誇張表情（驚訝/喜悅/震驚）',
+    bg:       '強對比色塊或漸層',
+  },
+};
+
+// ─── Color rules ─────────────────────────────────────
+const COLOR_RULES = {
+  tutorial: [
+    { name:'火焰紅', hex:'#ff0040', role:'主色 · 緊迫感', scheme:'red' },
+    { name:'金黃色', hex:'#ffcc00', role:'對比色 · 重點標示', scheme:'red' },
+  ],
+  review: [
+    { name:'科技藍', hex:'#0055cc', role:'主色 · 專業信任', scheme:'blue' },
+    { name:'天空藍', hex:'#00ccff', role:'對比色 · 清晰感', scheme:'blue' },
+  ],
+  challenge: [
+    { name:'活力橙', hex:'#ff6600', role:'主色 · 衝勁與挑戰', scheme:'orange' },
+    { name:'純白色', hex:'#ffffff', role:'對比色 · 乾淨有力', scheme:'orange' },
+  ],
+  exposé: [
+    { name:'夜幕黑', hex:'#1a1a2e', role:'主色 · 神秘感', scheme:'dark' },
+    { name:'血紅色', hex:'#ff0040', role:'對比色 · 警示危險', scheme:'dark' },
+  ],
+  money: [
+    { name:'財富金', hex:'#ffaa00', role:'主色 · 財富吸引力', scheme:'orange' },
+    { name:'深黑色', hex:'#111111', role:'對比色 · 高級感', scheme:'dark' },
+  ],
+  compare: [
+    { name:'對決紅', hex:'#ff0040', role:'左側主色', scheme:'red' },
+    { name:'科技藍', hex:'#0055cc', role:'右側對比', scheme:'blue' },
+  ],
+  vlog: [
+    { name:'清新綠', hex:'#00aa44', role:'主色 · 生活活力', scheme:'green' },
+    { name:'暖白色', hex:'#fffdf0', role:'對比色 · 溫暖自然', scheme:'green' },
+  ],
+  general: [
+    { name:'爆款紅', hex:'#ff0040', role:'主色 · 最高吸睛度', scheme:'red' },
+    { name:'金黃色', hex:'#ffcc00', role:'對比色 · 重點突出', scheme:'red' },
+  ],
+};
+
+// ─── Style tags ──────────────────────────────────────
+const STYLE_TAGS = {
+  tutorial: ['大字留白', '人物帶領視線', '步驟數字顯眼', '高對比背景', '箭頭指示'],
+  review:   ['產品主角', '人物反應表情', '乾淨背景', '價格數字大字', '真實感'],
+  challenge:['前後對比', '時間數字', '情緒落差大', '分割構圖', '動態感'],
+  exposé:   ['神秘暗色', '問號元素', '偷偷告訴你感', '電影感打光', '警示符號'],
+  money:    ['數字要大', '金色元素', '驚訝表情', '貨幣符號', '成果展示'],
+  compare:  ['分割畫面', 'VS大字', '左右對稱', '勝負明確', '選擇誘因'],
+  vlog:     ['真實自然', '生活場景', '情緒真實', '輕鬆氛圍', '人物親近感'],
+  general:  ['高對比配色', '大字主標', '誇張表情', '情緒衝擊', '簡潔構圖'],
+};
+
+// ─── CTR analysis ────────────────────────────────────
+const CTR_ITEMS = {
+  tutorial: [
+    { icon:'🧠', text:'「學了才知道」觸發知識缺口心理，讀者害怕錯過重要資訊', boost:'+22% CTR' },
+    { icon:'📊', text:'「99%的人做錯了」讓觀眾自我質疑，產生立刻驗證的衝動', boost:'+18% CTR' },
+    { icon:'⏱️', text:'時間對比（3年vs30天）創造強烈落差感，激發效率焦慮', boost:'+15% CTR' },
+  ],
+  review: [
+    { icon:'💰', text:'「值這個價嗎？」直接對準購買猶豫心理，代替觀眾做決定', boost:'+20% CTR' },
+    { icon:'🔍', text:'「買之前先看」定位為購前必看，製造錯過就後悔的緊迫感', boost:'+17% CTR' },
+    { icon:'⚖️', text:'價格對比觸發CP值比較心理，每個購物者的必看動機', boost:'+14% CTR' },
+  ],
+  challenge: [
+    { icon:'😰', text:'「差點放棄」暴露弱點反而引發共鳴，好奇結果如何', boost:'+21% CTR' },
+    { icon:'🏆', text:'前後對比是YouTube最高CTR構圖，進度結果一目了然', boost:'+19% CTR' },
+    { icon:'🤔', text:'「結果呢」開放式懸念，讓大腦無法不去點開確認', boost:'+16% CTR' },
+  ],
+  exposé: [
+    { icon:'🤫', text:'「他們不希望你知道」觸發陰謀論好奇心，對抗威權感', boost:'+25% CTR' },
+    { icon:'🔎', text:'「調查了3個月」暗示稀有內容，付出成本感讓內容更可信', boost:'+18% CTR' },
+    { icon:'⚠️', text:'官方vs真相的對立框架，讓觀眾感覺自己能看到內幕', boost:'+20% CTR' },
+  ],
+  money: [
+    { icon:'💸', text:'具體數字（翻3倍/月薪3萬）讓抽象承諾變成可想像的目標', boost:'+23% CTR' },
+    { icon:'😱', text:'誇張驚訝表情配合金錢符號，視覺上直接傳達財富衝擊', boost:'+19% CTR' },
+    { icon:'🎯', text:'「也能做到」降低門檻，讓觀眾覺得這是為自己量身打造', boost:'+17% CTR' },
+  ],
+  compare: [
+    { icon:'🤯', text:'「答案出乎意料」打破預期，觀眾必須點開才能解除認知失調', boost:'+22% CTR' },
+    { icon:'🏅', text:'「選錯會後悔」觸發損失規避心理，不看就可能吃虧', boost:'+20% CTR' },
+    { icon:'👁️', text:'分割構圖視覺衝擊強，在推薦列表中瞬間抓住眼球', boost:'+18% CTR' },
+  ],
+  vlog: [
+    { icon:'❤️', text:'真實情緒拉近距離，觀眾感覺在看朋友而非陌生人', boost:'+15% CTR' },
+    { icon:'✨', text:'「改變了人生」引發共鳴，觀眾想知道自己能否複製', boost:'+18% CTR' },
+    { icon:'😲', text:'「沒想到會發生」未知懸念是人類最原始的好奇驅動力', boost:'+16% CTR' },
+  ],
+  general: [
+    { icon:'🔥', text:'衝擊性主標直接刺激情緒，在0.5秒內讓手指停下來', boost:'+20% CTR' },
+    { icon:'💡', text:'「藏了很久」製造獨家稀缺感，觀眾覺得自己即將獲得特權', boost:'+18% CTR' },
+    { icon:'📈', text:'對比落差（以前vs現在）是人腦最容易理解的進步敘事', boost:'+15% CTR' },
+  ],
+};
+
+// ─── Main generator ──────────────────────────────────
+let lastPlanScheme = 'red';
+let lastPlanTitle  = '';
+
+function generatePlan() {
+  const topic = document.getElementById('plan-topic').value.trim();
+  if(!topic){ alert('請先輸入影片主題！'); return; }
+
+  const type = classifyTopic(topic);
+  const titles = TITLE_TEMPLATES[type] || TITLE_TEMPLATES.general;
+  const comp   = COMP_RULES[type]      || COMP_RULES.general;
+  const colors = COLOR_RULES[type]     || COLOR_RULES.general;
+  const styles = STYLE_TAGS[type]      || STYLE_TAGS.general;
+  const ctrs   = CTR_ITEMS[type]       || CTR_ITEMS.general;
+
+  lastPlanScheme = colors[0].scheme;
+  lastPlanTitle  = titles[0].fn(topic);
+
+  // 1. Titles
+  document.getElementById('plan-titles').innerHTML = titles.map((t,i) => `
+    <div class="plan-title-card" onclick="copyPlanTitle(this,'${t.fn(topic).replace(/'/g,"\\'")}')">
+      <span class="plan-title-tag ${STYLE_CSS[t.style]}">${STYLE_LABELS[t.style]}</span>
+      <span class="plan-title-text">${t.fn(topic)}</span>
+      <span class="plan-title-copy">點擊複製</span>
+    </div>
+  `).join('');
+
+  // 2. Composition
+  document.getElementById('plan-comp').innerHTML = `
+    <div class="plan-card"><div class="plan-card-lbl">人物 / 物件</div><div class="plan-card-val">${comp.subject}</div></div>
+    <div class="plan-card"><div class="plan-card-lbl">表情 / 動作</div><div class="plan-card-val">${comp.expression}</div></div>
+    <div class="plan-card"><div class="plan-card-lbl">背景風格</div><div class="plan-card-val">${comp.bg}</div></div>
+  `;
+
+  // 3. Colors
+  document.getElementById('plan-colors').innerHTML = colors.map(c => `
+    <div class="plan-color-chip" onclick="applyColorScheme('${c.scheme}')">
+      <div class="plan-color-swatch" style="background:${c.hex}"></div>
+      <div class="plan-color-info">
+        <span class="plan-color-name">${c.name}</span>
+        <span class="plan-color-role">${c.role}</span>
+      </div>
+    </div>
+  `).join('');
+
+  // 4. Style tags
+  const tagColors = ['#ff0040','#ff6600','#0055cc','#00aa44','#8800ee','#cc7700'];
+  document.getElementById('plan-style').innerHTML = styles.map((s,i) => `
+    <span class="plan-style-tag" style="border-color:${tagColors[i%tagColors.length]};color:${tagColors[i%tagColors.length]}">${s}</span>
+  `).join('');
+
+  // 5. CTR
+  const totalBoost = ctrs.reduce((s,c)=>s+parseInt(c.boost),0);
+  document.getElementById('plan-ctr-badge').textContent = `預測 CTR +${Math.round(totalBoost/ctrs.length)}%`;
+  document.getElementById('plan-ctr').innerHTML = ctrs.map(c => `
+    <div class="plan-ctr-item">
+      <span class="plan-ctr-icon">${c.icon}</span>
+      <span>${c.text}</span>
+      <span class="plan-ctr-boost">${c.boost}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('plan-result').style.display = '';
+  document.getElementById('plan-result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function clearPlan() {
+  document.getElementById('plan-topic').value = '';
+  document.getElementById('plan-result').style.display = 'none';
+}
+
+function copyPlanTitle(card, text) {
+  navigator.clipboard.writeText(text).catch(()=>{});
+  const span = card.querySelector('.plan-title-copy');
+  span.textContent = '✅ 已複製！';
+  setTimeout(()=>{ span.textContent='點擊複製'; }, 1500);
+  // also fill canvas title input
+  document.getElementById('th-title').value = text.slice(0,20);
+  lastPlanTitle = text;
+}
+
+function applyColorScheme(scheme) {
+  currentScheme = scheme;
+  document.querySelectorAll('.scheme-dot').forEach(d=>{
+    d.classList.toggle('active', d.dataset.scheme===scheme);
+  });
+}
+
+function applyPlanToCanvas() {
+  // apply color
+  applyColorScheme(lastPlanScheme);
+  // apply title
+  if(lastPlanTitle) document.getElementById('th-title').value = lastPlanTitle.slice(0,20);
+  // fill topic as channel hint
+  const topic = document.getElementById('plan-topic').value.trim();
+  if(topic && !document.getElementById('th-channel').value)
+    document.getElementById('th-channel').value = topic.slice(0,20);
+  // switch to canvas tab
+  const canvasTab = document.querySelector('.stab:last-child');
+  switchThumbTab('canvas', canvasTab);
+}
 </script>
 </body>
 </html>
